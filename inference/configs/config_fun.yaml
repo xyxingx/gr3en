@@ -1,0 +1,58 @@
+'task': 'ti2v-5B'
+# 'size': '640*352'
+'ckpt_dir': './checkpoints/wan2.2-ti2v-5b' # 5B
+
+resume_from_checkpoint: "./checkpoints/gr3en_weights.pt"
+resume_step: 28000 # imperically 28K works the best.
+
+zipnerf: false #this was used for the zipnerf scene, you ignore
+
+#### GR3EN_dataset inference config ####
+start_idx: 0 # select any frame to start, you can also use -1 then each run will start with a random frame.
+
+# the intensity for individual light sources, recving values:[0.5,1] and, -1.  0.5 means the light is off, 1 means the light is on and has the maximum intensity.
+#-1, means there is no changes applied to the lightsou.
+mask_intensity: {
+    # "110": 1,
+    # "010": 0.5,
+    "010": 1,
+    # "100": 0.5,
+    # "011": 0.5,
+    # "101": 1
+}
+
+light_color: {
+    "010": [1.0, 0, 0],  # Red
+    # "010": [1.0, 0.5, 0.0],  # Orange
+    # "011": [1.0, 1.0, 0.0],  # Yellow
+    # "100": [0.0, 1.0, 0.0],  # Green
+    "101": [0.0, 0.0, 1.0],  # Blue
+    "110": [0.0, 1, 0.0]   # Violet / Indigo
+}
+
+ambient_scale: 0.5
+test_root: "./data/fun_video/"
+input_name: "frames"
+mask_name: "mask"
+ae_scale: 0.99
+frame_step: 2
+
+# basic model config, NO NEED to change unless you know what you are doing
+image_size: [352, 640]
+max_num_frames: 81 # this is the hard coded number of frames.
+mixed_precision: "bf16"
+stride_min: 1
+stride_max: 1
+train_batch_size: 1
+dataloader_num_workers: 2
+
+gradient_accumulation_steps: 1
+learning_rate: 0.0001
+lr_scheduler: "cosine_with_restarts"
+lr_warmup_steps: 100
+lr_num_cycles: 3
+max_grad_norm: 1.0
+enable_slicing: true
+enable_tiling: true
+gradient_checkpointing: true
+allow_tf32: true

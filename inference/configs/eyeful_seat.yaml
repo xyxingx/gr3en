@@ -1,0 +1,44 @@
+'task': 'ti2v-5B'
+# 'size': '640*352'
+'ckpt_dir': './checkpoints/wan2.2-ti2v-5b' # 5B
+
+resume_from_checkpoint: "./checkpoints/gr3en_weights.pt"
+resume_step: 16000
+zipnerf: false
+#### GR3EN_dataset inference config ####
+start_idx: 0
+mask_intensity: {
+    "110": 0.58,
+    "100": 0.5,
+    "010": 1,
+    "001": 0.5
+}
+light_color: {
+    "100": [1.0, 0.41, 0.71],  # deep pink
+    "110": [1.0, 0.41, 0.71]
+}
+ambient_scale: 1
+test_root: "./data/seating_2/"
+input_name: "frames"
+mask_name: "mask"
+ae_scale: 0.99
+frame_step: 5
+# basic model config, no need to change unless you know what you are doing
+image_size: [352, 640]
+max_num_frames: 81
+mixed_precision: "bf16"
+stride_min: 1
+stride_max: 1
+train_batch_size: 1
+dataloader_num_workers: 2
+
+gradient_accumulation_steps: 1
+learning_rate: 0.0001
+lr_scheduler: "cosine_with_restarts"
+lr_warmup_steps: 100
+lr_num_cycles: 3
+max_grad_norm: 1.0
+enable_slicing: true
+enable_tiling: true
+gradient_checkpointing: true
+allow_tf32: true

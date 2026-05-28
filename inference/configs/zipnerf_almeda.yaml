@@ -1,0 +1,41 @@
+'task': 'ti2v-5B'
+# 'size': '640*352'
+'ckpt_dir': './checkpoints/wan2.2-ti2v-5b' # 5B
+resume_from_checkpoint: "./checkpoints/gr3en_weights.pt"
+resume_step: 16000
+zipnerf: true
+#### GR3EN_dataset inference config ####
+start_idx: 0
+# mask_intensity: {
+#     "010": 5,
+#     # "010": 1,
+# }
+# light_color: {
+#     "010": [1.0, 0.0, 0.0],  # warm light
+#     # "010": [0.5, 0.3, 0.6],
+# }
+ambient_scale: 0.5
+test_root: "./data/almeda_all/"
+input_name: "frames"
+mask_name: "mask"
+ae_scale: 0.99
+frame_step: 5
+# basic model config, no need to change unless you know what you are doing
+image_size: [352, 640]
+max_num_frames: 81
+mixed_precision: "bf16"
+stride_min: 1
+stride_max: 1
+train_batch_size: 1
+dataloader_num_workers: 2
+
+gradient_accumulation_steps: 1
+learning_rate: 0.0001
+lr_scheduler: "cosine_with_restarts"
+lr_warmup_steps: 100
+lr_num_cycles: 3
+max_grad_norm: 1.0
+enable_slicing: true
+enable_tiling: true
+gradient_checkpointing: true
+allow_tf32: true
