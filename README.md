@@ -1,5 +1,4 @@
-# GR3EN: Generative Relighting with 3D-Aware Video Diffusion
-
+# GR3EN: Generative Relighting for 3D Environments
 GR3EN is a relighting model that finetunes [Wan2.2](https://github.com/Wan-Video/Wan2.2)
 for 3D-aware video generation with controllable lighting. Given input images
 and light control masks, GR3EN generates relit video sequences.
