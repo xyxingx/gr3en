@@ -73,6 +73,17 @@ PYTHONPATH=. python studio_app.py --port 7862
 4. **Relight** — single run or 5 random seeds. Denoising steps default to 10
    for fast previews; raise to ~50 for best quality.
 
+<table>
+  <tr>
+    <td width="50%"><b>1 · Upload</b> — single-page wizard with a step-by-step progress bar<br><img src="docs/demo_step1.png"></td>
+    <td width="50%"><b>2 · Select lights</b> — click a light source, SAM 2 segments and tracks it<br><img src="docs/demo_step2.png"></td>
+  </tr>
+  <tr>
+    <td width="50%"><b>3 · Configure</b> — per-light color/intensity and the rendered control mask<br><img src="docs/demo_step3.png"></td>
+    <td width="50%"><b>4 · Relight</b> — input vs. relit output (lamp recolored to blue)<br><img src="docs/demo_step4.png"></td>
+  </tr>
+</table>
+
 Example scenes at the bottom of the page (video + palette mask pairs from the
 paper, plus input-only clips from RE10K / DROID / Aria) jump straight into the
 flow. Place them under `inference/assets/` (`demo_video/`, `extra_video/`) —
