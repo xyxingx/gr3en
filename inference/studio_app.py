@@ -368,7 +368,8 @@ def build_studio_ui():
         "4. **Relight** — one run, or ×5 for five random-seed variations. "
         "A run takes under 30 seconds on an RTX 6000 Ada.\n\n"
         "*Paper scenes come with ready-made light masks and jump straight to "
-        "step 3.*"
+        "step 3.*\n\n"
+        "This is not an official Google product."
     )
     with gr.Column(elem_id="stepper-box"):
       stepper = gr.HTML(stepper_html(0, "Upload a video to begin"))
