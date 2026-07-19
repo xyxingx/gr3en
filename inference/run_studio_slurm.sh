@@ -38,12 +38,12 @@ echo "node: $(hostname)"
 
 # stage weights into node tmpfs and use the staged copies
 STAGE=/tmp/gr3en_staged
-export GR3EN_STAGE_CKPTS=28000
+export GR3EN_STAGE_CKPTS=main
 bash stage_weights.sh || echo "WARNING: staging failed; using NFS paths"
 if [ -f "$STAGE/wan2.2-ti2v-5b/Wan2.2_VAE.pth" ]; then
   export WAN_CKPT_DIR="$STAGE/wan2.2-ti2v-5b"
   [ -f "$STAGE/sam2/sam2.1_hiera_large.pt" ] && export SAM2_CKPT="$STAGE/sam2/sam2.1_hiera_large.pt"
-  [ -f "$STAGE/gr3en_weights_28000_full.pt" ] && export GR3EN_WEIGHTS_PT="$STAGE/gr3en_weights_28000_full.pt"
+  [ -f "$STAGE/gr3en_weights.pt" ] && export GR3EN_WEIGHTS_PT="$STAGE/gr3en_weights.pt"
   echo "using staged weights from $STAGE"
 fi
 

@@ -19,8 +19,8 @@
 'task': 'ti2v-5B'
 'ckpt_dir': 'checkpoints/wan2.2-ti2v-5b'
 
-resume_from_checkpoint: "checkpoints/gr3en_weights_28000_full.pt"
-resume_step: 28000
+resume_from_checkpoint: "checkpoints/gr3en_weights.pt"
+resume_step: 0
 
 zipnerf: false
 

@@ -21,8 +21,8 @@ set -e
 
 SELF=$(cd "$(dirname "$0")" && pwd)
 SRC_WAN=$SELF/checkpoints/wan2.2-ti2v-5b
-SRC_28000=$SELF/checkpoints/gr3en_weights_28000_full.pt
-SRC_38400=$SELF/checkpoints/gr3en_weights_38400_full.pt
+SRC_MAIN=$SELF/checkpoints/gr3en_weights.pt
+SRC_ALT=$SELF/checkpoints/gr3en_weights_alt.pt
 SRC_SAM2=$SELF/checkpoints/sam2/sam2.1_hiera_large.pt
 
 STAGE=${GR3EN_STAGE:-/tmp/gr3en_staged}
@@ -40,10 +40,10 @@ stage_file() {  # stage_file <src> <dst>
 for f in "$SRC_WAN"/*; do
   stage_file "$f" "$STAGE/wan2.2-ti2v-5b/$(basename "$f")"
 done
-# GR3EN_STAGE_CKPTS: which fine-tuned checkpoints to stage (28000|38400|all)
+# GR3EN_STAGE_CKPTS: which fine-tuned checkpoints to stage (main|alt|all)
 CKPTS=${GR3EN_STAGE_CKPTS:-all}
-case "$CKPTS" in *28000*|all) stage_file "$SRC_28000" "$STAGE/gr3en_weights_28000_full.pt" ;; esac
-case "$CKPTS" in *38400*|all) [ -f "$SRC_38400" ] && stage_file "$SRC_38400" "$STAGE/gr3en_weights_38400_full.pt" ;; esac
+case "$CKPTS" in *main*|all) stage_file "$SRC_MAIN" "$STAGE/gr3en_weights.pt" ;; esac
+case "$CKPTS" in *alt*|all) [ -f "$SRC_ALT" ] && stage_file "$SRC_ALT" "$STAGE/gr3en_weights_alt.pt" ;; esac
 [ -f "$SRC_SAM2" ] && stage_file "$SRC_SAM2" "$STAGE/sam2/sam2.1_hiera_large.pt"
 
 du -sh "$STAGE"

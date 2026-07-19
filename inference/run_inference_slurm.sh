@@ -44,11 +44,11 @@ if [ -f "$STAGE/wan2.2-ti2v-5b/Wan2.2_VAE.pth" ]; then
   # rewrite absolute repo paths first, then bare repo-relative paths
   CFG_STR=$(echo "$CFG_STR" | sed \
     -e "s|$REPO/checkpoints/wan2.2-ti2v-5b|$STAGE/wan2.2-ti2v-5b|g" \
-    -e "s|$REPO/checkpoints/gr3en_weights_28000_full.pt|$STAGE/gr3en_weights_28000_full.pt|g" \
-    -e "s|$REPO/checkpoints/gr3en_weights_38400_full.pt|$STAGE/gr3en_weights_38400_full.pt|g" \
+    -e "s|$REPO/checkpoints/gr3en_weights.pt|$STAGE/gr3en_weights.pt|g" \
+    -e "s|$REPO/checkpoints/gr3en_weights_alt.pt|$STAGE/gr3en_weights_alt.pt|g" \
     -e "s|'checkpoints/wan2.2-ti2v-5b'|'$STAGE/wan2.2-ti2v-5b'|g" \
-    -e "s|\"checkpoints/gr3en_weights_28000_full.pt\"|\"$STAGE/gr3en_weights_28000_full.pt\"|g" \
-    -e "s|\"checkpoints/gr3en_weights_38400_full.pt\"|\"$STAGE/gr3en_weights_38400_full.pt\"|g")
+    -e "s|\"checkpoints/gr3en_weights.pt\"|\"$STAGE/gr3en_weights.pt\"|g" \
+    -e "s|\"checkpoints/gr3en_weights_alt.pt\"|\"$STAGE/gr3en_weights_alt.pt\"|g")
   echo "using staged weights from $STAGE"
 fi
 

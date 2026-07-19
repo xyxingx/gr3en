@@ -17,7 +17,7 @@
 'ckpt_dir': './checkpoints/wan2.2-ti2v-5b' # 5B
 
 resume_from_checkpoint: "./checkpoints/gr3en_weights.pt"
-resume_step: 28000 # imperically 28K works the best.
+resume_step: 0 # imperically 28K works the best.
 
 zipnerf: false #this was used for the zipnerf scene, you ignore
 

@@ -66,7 +66,7 @@ WAN_CKPT_DIR = os.environ.get(
 # Override with GR3EN_WEIGHTS_PT to serve a different training run.
 GR3EN_WEIGHTS = os.environ.get(
     "GR3EN_WEIGHTS_PT",
-    os.path.join(ASSETS_ROOT, "checkpoints", "gr3en_weights_28000_full.pt"),
+    os.path.join(ASSETS_ROOT, "checkpoints", "gr3en_weights.pt"),
 )
 
 N_FRAMES = 81

@@ -47,7 +47,7 @@ PALETTE_SPECS = ['110', '101', '011', '111', '11h', '1h1', 'h11', 'hh1',
 
 WAN_CKPT_DIR = os.path.join(INFERENCE_DIR, "checkpoints", "wan2.2-ti2v-5b")
 GR3EN_WEIGHTS = os.path.join(INFERENCE_DIR, "checkpoints",
-                             "gr3en_weights_28000_full.pt")
+                             "gr3en_weights.pt")
 
 
 def parse_spec(spec, hval=0.5):
@@ -128,7 +128,7 @@ def build_config(data_root, intensity, color):
         "task": "ti2v-5B",
         "ckpt_dir": WAN_CKPT_DIR,
         "resume_from_checkpoint": GR3EN_WEIGHTS,
-        "resume_step": 28000,
+        "resume_step": 0,
         "zipnerf": False,
         "start_idx": 0,
         "mask_intensity": intensity,

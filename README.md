@@ -26,7 +26,7 @@ gr3en/inference/checkpoints/
 │   ├── config.json
 │   ├── prompt_embed.pt
 │   └── null_prompt_embed.pt
-├── gr3en_weights_28000_full.pt      # GR3EN fine-tuned weights
+├── gr3en_weights.pt      # GR3EN fine-tuned weights
 └── sam2/
     └── sam2.1_hiera_large.pt        # SAM 2 (interactive demos only)
 ```
