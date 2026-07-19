@@ -1,5 +1,10 @@
 # GR3EN: Generative Relighting for 3D Environments
 
+[![arXiv](https://img.shields.io/badge/arXiv-2601.16272-b31b1b.svg)](https://arxiv.org/abs/2601.16272)
+[![Project Page](https://img.shields.io/badge/Project%20Page-GR3EN-blue)](https://gr3en-relight.github.io)
+[![HF Demo](https://img.shields.io/badge/%F0%9F%A4%97%20Demo-GR3EN-yellow)](https://huggingface.co/spaces/xyxingx/GR3EN)
+[![HF Model](https://img.shields.io/badge/%F0%9F%A4%97%20Model-GR3EN-yellow)](https://huggingface.co/xyxingx/GR3EN)
+
 GR3EN is a relighting model that finetunes [Wan2.2](https://github.com/Wan-Video/Wan2.2)
 for 3D-aware video generation with controllable lighting. Given input images
 and light control masks, GR3EN generates relit video sequences.
