@@ -14,9 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import easydict
+
 from wan.configs.shared_config import wan_shared_cfg
 
-# ------------------------ Wan I2V A14B ------------------------#
+#------------------------ Wan I2V A14B ------------------------#
 
 i2v_A14B = easydict.EasyDict(__name__='Config: Wan I2V A14B')
 i2v_A14B.update(wan_shared_cfg)

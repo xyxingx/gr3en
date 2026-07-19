@@ -17,3 +17,4 @@ opencv-python-headless
 imageio
 imageio-ffmpeg
 tensorboard
+torchmetrics  # only needed for evaluation.py

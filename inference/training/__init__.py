@@ -1,6 +1,5 @@
 # pylint: disable=all
-# This file has been modified by Google DeepMind.
-# Copyright 2024-2025 The Alibaba Wan Team Authors. All rights reserved.
+# Copyright 2026 DeepMind Technologies Limited
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,6 +12,3 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from . import configs, distributed, modules
-from .image2video import WanI2V
-from .textimage2video import WanTI2V

@@ -1,24 +1,16 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+# model weights and large binaries (download separately)
+checkpoints/
+*.pt
+*.pth
+*.safetensors
 
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
+# run artifacts
+output/
+*.log
+__pycache__/
+*.pyc
+
+# local data and demo assets
+data/
+assets/
+.DS_Store

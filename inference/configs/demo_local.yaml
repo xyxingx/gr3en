@@ -1,0 +1,66 @@
+# Copyright 2026 DeepMind Technologies Limited
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# Local demo config for the converted GR3EN_pre_release inference code.
+# Relights the demo_video clip (81 frames + SAM2 lamp masks) that ships with
+# /home/xxing/model/gr3en. The white SAM2 masks match palette spec "111".
+
+'task': 'ti2v-5B'
+'ckpt_dir': 'checkpoints/wan2.2-ti2v-5b'
+
+# GR3EN fine-tuned weights (full consolidated checkpoint: dit + controlnet).
+resume_from_checkpoint: "checkpoints/gr3en_weights_28000_full.pt"
+resume_step: 28000
+
+zipnerf: false
+
+#### GR3EN_dataset inference config ####
+start_idx: 0
+
+# White SAM2 masks -> spec "111". Intensity 1.0 = lamp fully on.
+mask_intensity: {
+    "111": 1.0,
+}
+
+# Warm white lamp color.
+light_color: {
+    "111": [1.0, 0.85, 0.6],
+}
+
+ambient_scale: 0.5
+test_root: "data/demo_video/"
+input_name: "frames"
+mask_name: "mask"
+ae_scale: 0.99
+# demo clip has exactly 81 frames; step must be 1 or the dataset is empty
+frame_step: 1
+
+# basic model config, NO NEED to change unless you know what you are doing
+image_size: [352, 640]
+max_num_frames: 81
+mixed_precision: "bf16"
+stride_min: 1
+stride_max: 1
+train_batch_size: 1
+dataloader_num_workers: 2
+
+gradient_accumulation_steps: 1
+learning_rate: 0.0001
+lr_scheduler: "cosine_with_restarts"
+lr_warmup_steps: 100
+lr_num_cycles: 3
+max_grad_norm: 1.0
+enable_slicing: true
+enable_tiling: true
+gradient_checkpointing: true
+allow_tf32: true

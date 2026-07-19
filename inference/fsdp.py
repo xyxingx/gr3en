@@ -12,8 +12,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+r"""FSDP launcher for WAN + GR3EN_dataset evaluation / generation.
 
-r"""FSDP launcher for WAN + GR3EN_dataset evaluation / generation."""
+Converted from the internal version: launch with standard torchrun,
+e.g.
+
+  PYTHONPATH=inference torchrun --nproc_per_node=2 --standalone \
+      inference/fsdp.py \
+      --model_configs_string="$(cat inference/configs/demo_local.yaml)" \
+      --workdir=./output/demo --enable_flash=True
+"""
 
 from collections.abc import Sequence
 from datetime import timedelta
@@ -32,13 +40,14 @@ from torch.utils.data import DataLoader
 from torch.utils.data.distributed import DistributedSampler
 from torch.utils.tensorboard import SummaryWriter
 from tqdm.auto import tqdm
+import yaml
 
 # imports from project code
 from training.relit_dataset import GR3EN_dataset
 from wan import textimage2video
 from wan.configs.init import WAN_CONFIGS
 from wan.utils.utils import save_video
-import yaml
+
 
 # ========================= Flags =========================
 
@@ -152,9 +161,9 @@ def fsdp_train_and_test(
   task = model_configs.task
   cfg = WAN_CONFIGS[task]
 
-  # A base GR3EN_dataset to define effective "train size" for lr scheduler / logging.
-  # (We don't actually train here, but optimizer + scheduler are passed into
-  #  load_sharded_checkpoint.)
+  # A base GR3EN_dataset to define effective "train size" for lr scheduler /
+  # logging. (We don't actually train here, but optimizer + scheduler can be
+  # passed into the checkpoint loaders.)
   base_dataset = GR3EN_dataset(
       split="test",
       sample_n_frames=model_configs.max_num_frames,
@@ -165,6 +174,7 @@ def fsdp_train_and_test(
       mask_name=getattr(model_configs, "mask_name", "mask"),
       ae_scale=getattr(model_configs, "ae_scale", None),
       frame_step=getattr(model_configs, "frame_step", 5),
+      zipnerf=getattr(model_configs, "zipnerf", False),
   )
 
   base_sampler = DistributedSampler(
@@ -192,7 +202,7 @@ def fsdp_train_and_test(
       device_id=local_rank,
       rank=global_rank,
       dit_fsdp=True,
-      use_sp=False,
+      use_sp=False,  # TODO: setup SP later (speedup)
       convert_model_dtype=True,
       config=cfg,
       training=False,
@@ -216,7 +226,7 @@ def fsdp_train_and_test(
   main_logging(f"model: {model}", is_main)
 
   # Only initialize optimizer/scheduler if we are actually training
-  # (Saves massive VRAM for 5B model inference)
+  # (saves massive VRAM for 5B model inference).
   optimizer = None
   lr_scheduler = None
   if model_args["training"]:
@@ -228,19 +238,28 @@ def fsdp_train_and_test(
         model_configs.lr_scheduler,
         optimizer=optimizer,
         num_warmup_steps=model_configs.lr_warmup_steps,
-        num_training_steps=len(base_dataloader) * 1000,
+        num_training_steps=len(base_dataloader) * 1000,  # dummy value for inference
         num_cycles=model_configs.lr_num_cycles,
     )
 
   # ----------------- Checkpoint resume (if any) -----------------
 
   if model_configs.resume_from_checkpoint is not None:
-    global_step = model.load_sharded_checkpoint(
-        model_configs.resume_from_checkpoint,
-        model_configs.resume_step,
-        optimizer,
-        lr_scheduler,
-    )
+    if model_configs.resume_from_checkpoint.endswith(".pt"):
+      # full (non-sharded) checkpoint: {dit_state_dict, controlnet_state_dict, ...}
+      global_step, _ = model.load_checkpoint(
+          model_configs.resume_from_checkpoint,
+          optimizer,
+          lr_scheduler,
+          is_main,
+      )
+    else:
+      global_step = model.load_sharded_checkpoint(
+          model_configs.resume_from_checkpoint,
+          model_configs.resume_step,
+          optimizer,
+          lr_scheduler,
+      )
     main_logging(f"loaded checkpoint from {global_step}", is_main)
     init_step = global_step
   else:
@@ -266,9 +285,7 @@ def fsdp_train_and_test(
   # ================== GENERATION / EVAL WITH GR3EN_dataset ==================
 
   torch.cuda.empty_cache()
-  generation_dir = (
-      os.path.join(workdir, "gen") if workdir is not None else "gen"
-  )
+  generation_dir = os.path.join(workdir, "gen") if workdir is not None else "gen"
   if is_main:
     os.makedirs(generation_dir, exist_ok=True)
 
