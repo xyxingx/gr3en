@@ -5,6 +5,18 @@
 [![HF Demo](https://img.shields.io/badge/%F0%9F%A4%97%20Demo-GR3EN-yellow)](https://huggingface.co/spaces/xyxingx/GR3EN)
 [![HF Model](https://img.shields.io/badge/%F0%9F%A4%97%20Model-GR3EN-yellow)](https://huggingface.co/xyxingx/GR3EN)
 
+[Xiaoyan Xing](https://xyxingx.github.io/)<sup>1,3</sup>,
+[Philipp Henzler](https://henzler.github.io/)<sup>2</sup>,
+[Junhwa Hur](https://hurjunhwa.github.io/)<sup>1</sup>,
+[Runze Li](https://bragilee.github.io/)<sup>1</sup>,
+[Jonathan T. Barron](https://jonbarron.info/)<sup>1</sup>,
+[Pratul P. Srinivasan](https://pratulsrinivasan.github.io/)<sup>1</sup>,
+[Dor Verbin](https://dorverbin.github.io/)<sup>1</sup>
+
+<sup>1</sup>Google DeepMind &nbsp;·&nbsp; <sup>2</sup>Google Research &nbsp;·&nbsp; <sup>3</sup>University of Amsterdam
+
+![GR3EN teaser](docs/teaser.gif)
+
 GR3EN is a relighting model that finetunes [Wan2.2](https://github.com/Wan-Video/Wan2.2)
 for 3D-aware video generation with controllable lighting. Given input images
 and light control masks, GR3EN generates relit video sequences.
