@@ -12,6 +12,10 @@ cd gr3en
 pip install -r requirements.txt
 ```
 
+**Hardware.** This release has been tested on NVIDIA RTX 6000 Ada (48 GB).
+We recommend a GPU with at least 48 GB of memory to run the full demo. The
+code also supports multi-GPU runs (faster) for batch inference via `torchrun`.
+
 ## Model Weights
 
 Download all checkpoints from

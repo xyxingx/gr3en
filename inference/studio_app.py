@@ -353,6 +353,23 @@ def build_studio_ui():
   with gr.Blocks(title="GR3EN Relighting Studio", css=CSS,
                  theme=gr.themes.Soft(primary_hue="orange")) as demo:
     gr.Markdown("# GR3EN Relighting Studio")
+    gr.Markdown(
+        "**GR3EN** (SIGGRAPH 2026) is a generative relighting model: give it "
+        "a video, tell it which light sources to turn on, off, or recolor, "
+        "and it re-renders the whole video under the new lighting. "
+        "[Project page](https://gr3en-relight.github.io)\n\n"
+        "**How to use**\n"
+        "1. **Upload** a video — or click an example scene at the bottom of "
+        "the page.\n"
+        "2. **Click each light source** in the frame; SAM 2 segments it "
+        "automatically. Use *New light* to add the next one.\n"
+        "3. **Set each light**: intensity slider (−1 = unchanged · 0 = off · "
+        "1 = brightest) and a color, then render the control mask.\n"
+        "4. **Relight** — one run, or ×5 for five random-seed variations. "
+        "A run takes under 30 seconds on an RTX 6000 Ada.\n\n"
+        "*Paper scenes come with ready-made light masks and jump straight to "
+        "step 3.*"
+    )
     with gr.Column(elem_id="stepper-box"):
       stepper = gr.HTML(stepper_html(0, "Upload a video to begin"))
 
