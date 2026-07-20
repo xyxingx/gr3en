@@ -176,9 +176,9 @@ def confirm_lights():
 
 # ------------------------- step 3 -> 4: render mask --------------------------
 def render_mask(*settings):
-  # per light: (color, state, intensity) with intensity on the RAW training
-  # scale (0-5); core._intensity_to_mask applies the training sigmoid when
-  # composing the mask, so values pass through untouched here.
+  # per light: (color, state, intensity) with intensity on the raw 1-5
+  # scale; core._intensity_to_mask encodes it as sigmoid(i) when composing
+  # the mask, so values pass through untouched here.
   colors = list(settings[0::3])
   states = list(settings[1::3])
   intens = [float(v) for v in settings[2::3]]

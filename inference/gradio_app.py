@@ -483,11 +483,10 @@ def _write_mp4(path, frames_uint8, fps=10):
 
 
 def _intensity_to_mask(i):
-  """Raw light intensity (0-5, the training scale) -> pre-norm mask value.
+  """Light intensity (1-5) -> pre-norm mask value.
 
-  Training passed the whole mask through a sigmoid, so brightness must be
-  encoded as sigmoid(i). The useful range is [1, 5] (5 = training max);
-  anything below 1 is clamped up to 1 — 'off' is a separate state."""
+  Brightness is encoded as sigmoid(i), so 'off' sits exactly at
+  sigmoid(0) = 0.5; i is clamped to [1, 5] (5 = maximum)."""
   return 1.0 / (1.0 + float(np.exp(-np.clip(float(i), 1.0, 5.0))))
 
 
