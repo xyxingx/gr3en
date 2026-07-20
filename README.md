@@ -69,8 +69,9 @@ PYTHONPATH=. python studio_app.py --port 7862
    81 frames you pick "first 81 frames" or downsampling at a recommended fps.
 2. **Select lights** — click each light source; SAM 2 segments it and tracks
    it through the whole clip. One button propagates all masks.
-3. **Configure lights** — per-light color and intensity
-   (1 = max, 0 = off, −1 = unchanged), plus external-lighting and
+3. **Configure lights** — per-light color, state (On / Off / No change)
+   and intensity on the raw training scale (0 = off, 5 = max; the mask value
+   is sigmoid(intensity), matching training), plus external-lighting and
    auto-exposure controls. Confirming renders the control mask the model sees.
 4. **Relight** — single run or 5 random seeds. Denoising steps default to 10
    for fast previews; raise to ~50 for best quality.
@@ -117,8 +118,9 @@ directories. On SLURM: `sbatch run_inference_slurm.sh <config> <workdir>`.
 In the yaml config (see `inference/configs/`):
 
 - `test_root` — directory with `frames/` and `mask/` PNG sequences
-- `mask_intensity` — per-light spec: `1.0` = on (max), `0.5` = off,
-  `-1` = no change
+- `mask_intensity` — per-light **mask-space** value: `1.0` = on (max),
+  `0.5` = off, `-1` = no change; for intermediate brightness use
+  `sigmoid(i)` of a raw intensity `i` in `[0, 5]` (the training convention)
 - `light_color` — per-light `[R, G, B]`
 - `ambient_scale` — external lighting (0.5 = neutral)
 - `resume_from_checkpoint` — path to the GR3EN `.pt`

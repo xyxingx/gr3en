@@ -30,6 +30,7 @@ Examples:
 """
 
 import argparse
+import math
 import colorsys
 import glob
 import os
@@ -110,7 +111,8 @@ def random_light_settings(specs, rng, p_off):
             intensity[spec] = 0.5  # off
         else:
             n_on += 1
-            intensity[spec] = round(rng.uniform(0.6, 1.0), 2)
+            intensity[spec] = round(  # sigmoid of a raw intensity in [1.5, 5]
+                1.0 / (1.0 + math.exp(-rng.uniform(1.5, 5.0))), 4)
             hue = rng.random()
             sat = rng.uniform(0.0, 0.9)
             rgb = colorsys.hsv_to_rgb(hue, sat, 1.0)
@@ -118,7 +120,8 @@ def random_light_settings(specs, rng, p_off):
     # never generate the all-off degenerate case: force one light on
     if specs and n_on == 0:
         spec = rng.choice(specs)
-        intensity[spec] = round(rng.uniform(0.6, 1.0), 2)
+        intensity[spec] = round(
+            1.0 / (1.0 + math.exp(-rng.uniform(1.5, 5.0))), 4)
         color[spec] = [1.0, 1.0, 1.0]
     return intensity, color
 

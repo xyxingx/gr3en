@@ -482,6 +482,15 @@ def _write_mp4(path, frames_uint8, fps=10):
   return path
 
 
+def _intensity_to_mask(i):
+  """Raw light intensity (0-5, the training scale) -> pre-norm mask value.
+
+  Training passed the whole mask through a sigmoid, so brightness must be
+  encoded as sigmoid(i); Off (i = 0) lands exactly on the 0.5 'off' level
+  and i = 5 is the maximum the model saw during training."""
+  return 1.0 / (1.0 + float(np.exp(-np.clip(float(i), 0.0, 5.0))))
+
+
 def build_mask(*light_settings):
   """Compose the pre-normalization light mask from per-light settings.
 
@@ -505,7 +514,7 @@ def build_mask(*light_settings):
       # (distinct from the -1 background / no-change level).
       val = np.array([0.5, 0.5, 0.5], np.float32)
     else:  # On
-      val = float(np.clip(intens[li], 0.5, 1.0)) * _hex_to_rgb01(colors[li])
+      val = _intensity_to_mask(intens[li]) * _hex_to_rgb01(colors[li])
     for t in range(N_FRAMES):
       mask_seq[t][region[t]] = val
   mask_seq = np.clip(mask_seq, 0.0, 1.0)
@@ -822,7 +831,7 @@ def palette_build(*settings):
       val = np.array([0.5, 0.5, 0.5], np.float32)  # explicit off level
       applied.append(f"'{spec}' off")
     else:
-      inten = float(np.clip(intens[i], 0.5, 1.0))
+      inten = _intensity_to_mask(intens[i])
       val = inten * _hex_to_rgb01(colors[i])
       applied.append(f"'{spec}' on ({inten:.2f})")
     mask_seq = mask_seq * (1 - region) + region * val[None, None, None, :]
@@ -995,8 +1004,8 @@ def build_full_ui():
           st = gr.Dropdown(["On", "Off", "No change"], value="On",
                            label="State", scale=2)
           col = gr.ColorPicker(value="#ffffff", label="Color (On)", scale=1)
-          inten = gr.Slider(0.5, 1.0, value=1.0, step=0.05,
-                            label="Intensity (0.5 = off)", scale=2)
+          inten = gr.Slider(0.0, 5.0, value=5.0, step=0.05,
+                            label="Intensity (0 = off · 5 = max)", scale=2)
         light_rows.append((row, st, col, inten))
       build_btn = gr.Button("Build mask & preview")
       mask_preview = gr.Video(label="Control-mask preview")
@@ -1065,8 +1074,8 @@ def build_full_ui():
           pst = gr.Dropdown(["On", "Off", "No change"], value="On",
                             label="State", scale=2)
           pcol = gr.ColorPicker(value="#ffffff", label="Color (On)", scale=1)
-          pint = gr.Slider(0.5, 1.0, value=1.0, step=0.05,
-                           label="Intensity (0.5 = off)", scale=2)
+          pint = gr.Slider(0.0, 5.0, value=5.0, step=0.05,
+                           label="Intensity (0 = off · 5 = max)", scale=2)
         p_rows.append(prow)
         p_labels.append(plabel)
         p_settings += [pst, pcol, pint]
@@ -1279,8 +1288,8 @@ def build_relight_ui():
           pst = gr.Dropdown(["On", "Off", "No change"], value="On",
                             label="State", scale=2)
           pcol = gr.ColorPicker(value="#ffffff", label="Color (On)", scale=1)
-          pint = gr.Slider(0.5, 1.0, value=1.0, step=0.05,
-                           label="Intensity (0.5 = off)", scale=2)
+          pint = gr.Slider(0.0, 5.0, value=5.0, step=0.05,
+                           label="Intensity (0 = off · 5 = max)", scale=2)
         p_rows.append(prow)
         p_labels.append(plabel)
         p_settings += [pst, pcol, pint]

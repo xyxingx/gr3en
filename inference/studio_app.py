@@ -175,26 +175,13 @@ def confirm_lights():
 
 
 # ------------------------- step 3 -> 4: render mask --------------------------
-def _ui_intensity_to_model(v):
-  """Map the intuitive UI slider (-1 = unchanged, 0 = off, 1 = max) onto the
-  model convention (state + intensity in [0.5, 1]). ANY negative value is
-  treated as -1 (unchanged)."""
-  v = float(v)
-  if v < -0.02:
-    return "No change", 1.0
-  if v <= 0.02:
-    return "Off", 1.0
-  return "On", 0.5 + 0.5 * min(v, 1.0)
-
-
 def render_mask(*settings):
-  colors = list(settings[0::2])
-  ui_intens = list(settings[1::2])
-  states, intens = [], []
-  for v in ui_intens:
-    st, mi = _ui_intensity_to_model(v)
-    states.append(st)
-    intens.append(mi)
+  # per light: (color, state, intensity) with intensity on the RAW training
+  # scale (0-5); core._intensity_to_mask applies the training sigmoid when
+  # composing the mask, so values pass through untouched here.
+  colors = list(settings[0::3])
+  states = list(settings[1::3])
+  intens = [float(v) for v in settings[2::3]]
 
   if STUDIO["mode"] == "palette":
     full = []
@@ -363,8 +350,8 @@ def build_studio_ui():
         "the page.\n"
         "2. **Click each light source** in the frame; SAM 2 segments it "
         "automatically. Use *New light* to add the next one.\n"
-        "3. **Set each light**: intensity slider (−1 = unchanged · 0 = off · "
-        "1 = brightest) and a color, then render the control mask.\n"
+        "3. **Set each light**: pick a color, choose On / Off / No change, "
+        "adjust intensity, then render the control mask.\n"
         "4. **Relight** — one run, or ×5 for five random-seed variations. "
         "A run takes under 30 seconds on an RTX 6000 Ada.\n\n"
         "*Paper scenes come with ready-made light masks and jump straight to "
@@ -421,12 +408,13 @@ def build_studio_ui():
         with gr.Row(visible=False) as row:
           lab = gr.Markdown(f"**Light {i}**")
           col = gr.ColorPicker(value="#ffffff", label="Color", scale=1)
-          inten = gr.Slider(-1.0, 1.0, value=1.0, step=0.05, scale=3,
-                            label="Intensity (1 = max · 0 = off · "
-                                  "-1 = unchanged)")
+          state = gr.Radio(["On", "Off", "No change"], value="On",
+                           label="State", scale=2)
+          inten = gr.Slider(0.0, 5.0, value=5.0, step=0.05, scale=2,
+                            label="Intensity (0 = off · 5 = max)")
         cfg_rows.append(row)
         cfg_labels.append(lab)
-        cfg_settings += [col, inten]
+        cfg_settings += [col, state, inten]
       render_btn = gr.Button("✓ Lights set — render control mask",
                              variant="primary")
       ctrl_preview = gr.Video(label="Control mask (what the model sees)")
