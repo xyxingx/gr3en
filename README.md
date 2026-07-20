@@ -5,7 +5,7 @@
 [![HF Demo](https://img.shields.io/badge/%F0%9F%A4%97%20Demo-GR3EN-yellow)](https://huggingface.co/spaces/xyxingx/GR3EN)
 [![HF Model](https://img.shields.io/badge/%F0%9F%A4%97%20Model-GR3EN-yellow)](https://huggingface.co/xyxingx/GR3EN)
 
-[Xiaoyan Xing](https://xyxingx.github.io/)<sup>1,3</sup>\*,
+[Xiaoyan Xing](https://xyxingx.github.io/)<sup>1,3,\*</sup>,
 [Philipp Henzler](https://henzler.github.io/)<sup>2</sup>,
 [Junhwa Hur](https://hurjunhwa.github.io/)<sup>1</sup>,
 [Runze Li](https://bragilee.github.io/)<sup>1</sup>,
