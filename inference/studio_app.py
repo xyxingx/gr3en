@@ -410,8 +410,8 @@ def build_studio_ui():
           col = gr.ColorPicker(value="#ffffff", label="Color", scale=1)
           state = gr.Radio(["On", "Off", "No change"], value="On",
                            label="State", scale=2)
-          inten = gr.Slider(0.0, 5.0, value=5.0, step=0.05, scale=2,
-                            label="Intensity (0 = off · 5 = max)")
+          inten = gr.Slider(1.0, 5.0, value=5.0, step=0.05, scale=2,
+                            label="Intensity (1 = dim · 5 = max)")
         cfg_rows.append(row)
         cfg_labels.append(lab)
         cfg_settings += [col, state, inten]

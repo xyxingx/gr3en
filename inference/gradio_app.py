@@ -486,9 +486,9 @@ def _intensity_to_mask(i):
   """Raw light intensity (0-5, the training scale) -> pre-norm mask value.
 
   Training passed the whole mask through a sigmoid, so brightness must be
-  encoded as sigmoid(i); Off (i = 0) lands exactly on the 0.5 'off' level
-  and i = 5 is the maximum the model saw during training."""
-  return 1.0 / (1.0 + float(np.exp(-np.clip(float(i), 0.0, 5.0))))
+  encoded as sigmoid(i). The useful range is [1, 5] (5 = training max);
+  anything below 1 is clamped up to 1 — 'off' is a separate state."""
+  return 1.0 / (1.0 + float(np.exp(-np.clip(float(i), 1.0, 5.0))))
 
 
 def build_mask(*light_settings):
@@ -1004,8 +1004,8 @@ def build_full_ui():
           st = gr.Dropdown(["On", "Off", "No change"], value="On",
                            label="State", scale=2)
           col = gr.ColorPicker(value="#ffffff", label="Color (On)", scale=1)
-          inten = gr.Slider(0.0, 5.0, value=5.0, step=0.05,
-                            label="Intensity (0 = off · 5 = max)", scale=2)
+          inten = gr.Slider(1.0, 5.0, value=5.0, step=0.05,
+                            label="Intensity (1 = dim · 5 = max)", scale=2)
         light_rows.append((row, st, col, inten))
       build_btn = gr.Button("Build mask & preview")
       mask_preview = gr.Video(label="Control-mask preview")
@@ -1074,8 +1074,8 @@ def build_full_ui():
           pst = gr.Dropdown(["On", "Off", "No change"], value="On",
                             label="State", scale=2)
           pcol = gr.ColorPicker(value="#ffffff", label="Color (On)", scale=1)
-          pint = gr.Slider(0.0, 5.0, value=5.0, step=0.05,
-                           label="Intensity (0 = off · 5 = max)", scale=2)
+          pint = gr.Slider(1.0, 5.0, value=5.0, step=0.05,
+                           label="Intensity (1 = dim · 5 = max)", scale=2)
         p_rows.append(prow)
         p_labels.append(plabel)
         p_settings += [pst, pcol, pint]
@@ -1288,8 +1288,8 @@ def build_relight_ui():
           pst = gr.Dropdown(["On", "Off", "No change"], value="On",
                             label="State", scale=2)
           pcol = gr.ColorPicker(value="#ffffff", label="Color (On)", scale=1)
-          pint = gr.Slider(0.0, 5.0, value=5.0, step=0.05,
-                           label="Intensity (0 = off · 5 = max)", scale=2)
+          pint = gr.Slider(1.0, 5.0, value=5.0, step=0.05,
+                           label="Intensity (1 = dim · 5 = max)", scale=2)
         p_rows.append(prow)
         p_labels.append(plabel)
         p_settings += [pst, pcol, pint]
