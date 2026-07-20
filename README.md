@@ -17,9 +17,9 @@
 
 ![GR3EN teaser](docs/teaser.gif)
 
-GR3EN is a relighting model that finetunes [Wan2.2](https://github.com/Wan-Video/Wan2.2)
+GR3EN is a relighting model that builds on [Wan2.2](https://github.com/Wan-Video/Wan2.2)
 for 3D-aware video generation with controllable lighting. Given input images
-and light control masks, GR3EN generates relit video sequences.
+and light control masks, GR3EN generates relit video sequences in 30s. No inverse rendering, no ray tracing.
 
 ## Installation
 
