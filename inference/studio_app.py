@@ -424,9 +424,9 @@ def build_studio_ui():
     with gr.Column(visible=False) as relight_section:
       gr.Markdown("### 4 · Relight")
       with gr.Row():
-        steps_slider = gr.Slider(10, 75, value=10, step=1, scale=3,
+        steps_slider = gr.Slider(1, 28, value=10, step=1, scale=3,
                                  label="Denoising steps (10 = fast preview, "
-                                       "50 = best quality)")
+                                       "28 = best quality)")
         relight_btn = gr.Button("Relight", variant="primary", scale=1)
         relight5_btn = gr.Button("Relight ×5 (random seeds)", scale=1)
       with gr.Row():
